@@ -23,4 +23,5 @@ spec:
      - while true; do
        echo "current date is:" > /usr/local/apache2/htdocs/index.html;
        date >> /usr/local/apache2/htdocs/index.html;
+       sleep 100;
        done
