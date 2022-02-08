@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: webreplica
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      service: websvc
+  template:
+    metadata:
+      labels:
+        service: websvc
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        volumeMounts:
+        - mountPath: /usr/share/nginx/html
+          name: webvol
+        ports:
+        - containerPort: 80
+      - name: debian
+        image: debian
+        volumeMounts:
+        - name: webvol
+          mountPath: /usr/share/nginx/html
+        command: ["/bin/bash", "-c"]
+        args:
+         - while true; do 
+           hostname > /usr/share/nginx/html/index.html;
+           sleep 5;
+           done
+      volumes:
+      - emptyDir: {}
+        name: webvol
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    service: websvc
+  name: henrysvc
+spec:
+  ports:
+  - port: 80
+    name: port1
+    protocol: TCP
+    targetPort: 80
+  - port: 88
+    name: port2
+    protocol: TCP
+    targetPort: 8088
+  selector:
+    service: websvc
+  type: NodePort
+status:
+  loadBalancer: {}
+
