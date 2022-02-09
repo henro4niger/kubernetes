@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: affinity
+  name: affinity
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: affinity
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: affinity
+    spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 90
+            preference:
+              matchExpressions:
+              - key: memory
+                operator: In
+                values:
+                - 64gb
+          - weight: 10
+            preference:
+              matchExpressions:
+              - key: memory
+                operator: In
+                values:
+                - 16gb
+      containers:
+      - image: nginx
+        name: nginx
+        resources: {}
+status: {}
