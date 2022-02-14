@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: taints
+  name: taints
+spec:  
+  replicas: 3
+  selector:
+    matchLabels:
+      app: taints
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: taints
+    spec:
+      tolerations:
+        - key: zone
+          operator: "Equal"
+          value: red
+          effect: "NoSchedule"
+      containers:
+      - image: nignx
+        name: nignx
+        resources: {}
+status: {}

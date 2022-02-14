@@ -23,10 +23,10 @@ spec:
           - weight: 90
             preference:
               matchExpressions:
-              - key: memory
+              - key: memory1
                 operator: In
                 values:
-                - 64gb
+                - 642gb
           - weight: 10
             preference:
               matchExpressions:

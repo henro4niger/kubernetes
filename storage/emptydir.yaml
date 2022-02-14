@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: emptydirpod
+  namespace: default
+  labels:
+    environment: prod
+
+spec:
+  containers:
+  - name: centos
+    image: centos:latest
+    command: ['/bin/bash', '-c', 'echo hello world; sleep 4000]
+    volumeMounts:
+      - mountPath: /centosvol
+        name: newvol
+  - name: debian
+    image: debian:latest
+    command: ['/bin/bash', '-c', 'echo hello world from debian; sleep 4000']
+    volumeMounts:
+    - mountPath: /debianvol
+      name: newvol
+  - name: alpine
+    image: alpine:latest
+    command: ['sh', '-c', 'time; sleep 4000']
+    volumeMounts:
+    - name: newvol
+      mountPath: /alpinevol
+  volumes:
+  - name: newvol
+    emptyDir: {}
