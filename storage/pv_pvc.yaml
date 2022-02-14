@@ -1,13 +1,48 @@
 ---
 apiVersion: v1
+kind: PersistentVolume
 metadata:
   name: newpv
 spec:
   hostPath:
-    path: /tmp/test
-  persistentVolumeClaimPolicy: Recycle
+    path: /tmp/newvol
+  persistentVolumeReclaimPolicy: Retain
   capacity:
     storage: 1Gi
   storageClassName: standard
   accessModes:
   - ReadWriteOnce
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: newpvc
+spec:
+  storageClassName: standard
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 500Mi
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pvcpod
+  labels:
+    env: staging
+  namespace: default
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    volumeMounts:
+    - name: newvol
+      mountPath: /html
+  volumes:
+  - name: newvol
+    persistentVolumeClaim:
+      claimName: newpvc
