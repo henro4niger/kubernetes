@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  creationTimestamp: null
+  labels:
+    app: statefulset
+  name: statefulset
+spec:
+  serviceName: statefulset
+  replicas: 6
+  selector:
+    matchLabels:
+      app: statefulset
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: statefulset
+    spec:
+      containers:
+      - image: nginx
+        name: nginx
+        ports:
+        - containerPort: 80
+        resources: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: statefulset
+  labels:
+    app: statefulset
+spec:
+  clusterIP: None
+  ports:
+  - port: 80
+  selector:
+    app: statefulset
